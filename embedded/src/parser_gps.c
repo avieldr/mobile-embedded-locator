@@ -1,6 +1,4 @@
-//this is ex9
 #include "parser_gps.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

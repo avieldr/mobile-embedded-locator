@@ -1,5 +1,3 @@
-//this is ex9
-
 # include "shared_tools.h"
 
 void delay(float number_of_seconds)
@@ -9,8 +7,6 @@ void delay(float number_of_seconds)
   curTicks = msTicks;
   while ((msTicks - curTicks) < dlyTicks) ;
 }
-
-
 
 void flushLocalBuffer(unsigned char *buf, int maxlen)
 {

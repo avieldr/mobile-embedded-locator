@@ -1,4 +1,3 @@
-//this is ex9
 #include <stdio.h>
 
 volatile uint32_t msTicks; /* counts 1ms timeTicks */

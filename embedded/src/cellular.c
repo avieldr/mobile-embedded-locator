@@ -1,4 +1,3 @@
-//this is ex9
 #include <stdint.h>
 #include "cellular.h"
 #include <stdio.h>
@@ -8,14 +7,12 @@
 #include "parser_cell.h"
 #include "serial_io_cell.h"
 
-
 #define BAUD 115200
 #define BUF_LEN 384
 #define MAX_INIT_TRIES 20
 #define MAX_CHECK_MODEM_TRIES 5
 #define NUM_OF_RETRIES_SETUP_CONNECTION_PROFILE 5
 #define NUM_OF_RETRIES_SETUP_SERVICE_PROFILE 5
-
 #define CHECK_MODEM_RECV_TIMEOUT 1000
 #define SIGNAL_QUALITY_RECV_TIMEOUT 500
 #define REG_STATUS_RECV_TIMEOUT 1000
@@ -25,11 +22,6 @@
 
 
 char buf[BUF_LEN + 1];
-
-
-
-
-
 
 bool get_single_op_info(char* input_buf, char* op_buff, char** str_tmp)
 {
@@ -113,7 +105,6 @@ void SetEchoMode(bool on)
 
 }
 
-
 void CellularDisable()
 {
     printf("%s\n", "-->Disabling Cellular Connection...");
@@ -121,9 +112,9 @@ void CellularDisable()
     printf("%s\n", "---->Cellular Connection disabled. Bye Bye!");
 
 }
+
 void ResetAtCommand()
 {
-//    SerialSend("A", 4);
     SerialFlushInputBuff();
 }
 
@@ -135,7 +126,6 @@ bool CellularCheckModem(void)
     unsigned int read_bytes = 0;
 
     char* valid_command = "AT\r\n";
-
 
     for (int i = 0; i < MAX_CHECK_MODEM_TRIES + 1; ++i)
     {
@@ -150,7 +140,6 @@ bool CellularCheckModem(void)
             continue;
         }
 
-//    flushLocalBuffer(buf, BUF_LEN);
         read_bytes = SerialRecvCellular(buf, BUF_LEN - 1, CHECK_MODEM_RECV_TIMEOUT);
         if (!read_bytes)
         {
@@ -175,7 +164,6 @@ bool CellularCheckModem(void)
 
 }
 
-
 bool CellularGetRegistrationStatus(int *status)
 {
     ResetAtCommand();
@@ -193,7 +181,6 @@ bool CellularGetRegistrationStatus(int *status)
         printf("%s\n", "---->Did not succeed sending CREG command\n---->REGISTRATION FAILED!!");
         return 0;
     }
-//    flushLocalBuffer(buf, BUF_LEN);
     read_bytes = SerialRecvCellular(buf, BUF_LEN - 1, REG_STATUS_RECV_TIMEOUT);
 
     if (!read_bytes)
@@ -212,7 +199,6 @@ bool CellularGetRegistrationStatus(int *status)
     }
 }
 
-
 bool CellularGetSignalQuality(int *csq)
 {
     printf("%s\n", "-->Trying to get signal quality");
@@ -230,7 +216,6 @@ bool CellularGetSignalQuality(int *csq)
         return 0;
     }
 
-//    flushLocalBuffer(buf, BUF_LEN);
     read_bytes = SerialRecvCellular(buf, BUF_LEN - 1, SIGNAL_QUALITY_RECV_TIMEOUT);
 
     if (!read_bytes)
@@ -250,7 +235,6 @@ bool CellularGetSignalQuality(int *csq)
         return 0;
     }
 }
-
 
 bool CellularSetOperator(int mode, char *operatorName)
 {
@@ -291,14 +275,12 @@ bool CellularSetOperator(int mode, char *operatorName)
 
     send_ret_val = SerialSend(cops_command, maxlen);
 
-
     if (!send_ret_val)
     {
         printf("%s\n", "---->Did not succeed sending CSQ command\n---->SIGNAL STRENGTH QUERY FAILED!!");
         return 0;
     }
 
-//    flushLocalBuffer(buf, BUF_LEN);
     read_bytes = SerialRecvCellular(buf, BUF_LEN - 1, timeout_ms);
 
     if (!read_bytes)
@@ -318,7 +300,6 @@ bool CellularSetOperator(int mode, char *operatorName)
         return 0;
     }
 }
-
 
 bool CellularGetOperators(OPERATOR_INFO *opList, int maxops, int *numOpsFound)
 {
@@ -392,7 +373,7 @@ bool CellularGetICCID(char* iccid, int maxlen)
         return 0;
     }
 
-    read_bytes = SerialRecvCellular(buf, maxlen - 1, REG_STATUS_RECV_TIMEOUT);  // todo set timeout
+    read_bytes = SerialRecvCellular(buf, maxlen - 1, REG_STATUS_RECV_TIMEOUT);
 
     if (!read_bytes)
     {
@@ -422,7 +403,6 @@ int CellularGetLastError(char *errmsg, int errmsg_max_len)
     return 1;
 }
 
-
 bool CellularGetCops() {
     ResetAtCommand();
 
@@ -444,6 +424,7 @@ bool CellularGetCops() {
     }
     return 1;
 }
+
 bool CellularSetupInternetConnectionProfile(int inact_time_sec)
 {
     char *conTypeStr = "AT^SICS=0,conType,\"GPRS0\"\r\n";
@@ -486,9 +467,7 @@ bool CellularSetupInternetConnectionProfile(int inact_time_sec)
 
     printf("%s\n", "-->Failed to setup internet connection profile.");
     return 0;
-
 }
-
 
 bool CellularSetupInternetServiceSetupProfile(char *IP, int port, int keepintvl_sec)
 {
@@ -497,7 +476,6 @@ bool CellularSetupInternetServiceSetupProfile(char *IP, int port, int keepintvl_
     char response_buf[131];
     int  response_max_len = 100;
     char snum[7];
-
 
     for (int i = 0; i < NUM_OF_RETRIES_SETUP_SERVICE_PROFILE; ++i)
     {
@@ -511,14 +489,12 @@ bool CellularSetupInternetServiceSetupProfile(char *IP, int port, int keepintvl_
         {
             continue;
         }
-//        printf("%s", "SENT: AT^SISS=1,\"SrvType\",\"Socket\"\r\n");
 
         if (!send_ok_response_command(response_buf, "AT^SISS=1,\"conId\",\"0\"\r\n",
                 response_max_len, 1000))
         {
             continue;
         }
-//        printf("%s", "SENT: AT^SISS=1,\"conId\",\"0\"\r\n");
 
         flushLocalBuffer(local_buf, URL_MAX_LEN +100);
         strcat(local_buf, "AT^SISS=1,\"address\",\"socktcp://");
@@ -539,7 +515,6 @@ bool CellularSetupInternetServiceSetupProfile(char *IP, int port, int keepintvl_
 
     printf("%s\n", "-->Failed to setup internet service setup profile.");
     return 0;
-
 }
 
 int CellularSendHTTPPOSTRequest(char *payload, int payload_len, char *response, int response_max_len)
@@ -553,9 +528,6 @@ int CellularSendHTTPPOSTRequest(char *payload, int payload_len, char *response, 
     printf("%s\n", "-->Sending http request");
 
     SerialSendCellular("AT^SISO=1\r\n", 14);
-//    if (!send_ok_response_command(response_buf, "AT^SISO=1\r\n", 14, 2000)) {
-//    	return -1;
-//	}
 
     if (!awaitReceviediResponse(response_buf, "^SISW: 1,1",6000)){
     	send_ok_response_command(response_buf, "AT^SISC=1\r\n", response_max_len, 1000);
@@ -570,16 +542,10 @@ int CellularSendHTTPPOSTRequest(char *payload, int payload_len, char *response, 
     SerialSend("+++", 4);
     delay(2);
     send_ok_response_command(response_buf, "AT^SISC=1\r\n", response_max_len, 1000);
-//    awaitReceviediResponse(response_buf, "NO CARRIER", 30000);
-//    printf("%s%s\n", "rec: ", response_buf);
-//    strcpy(response, response_buf);
-//    if (!send_ok_response_command(response_buf, "AT^SISC=1\r\n", response_max_len, 1000)) { return -1;}
 
     if (rec_bytes) { return rec_bytes; }
     return -1;
 }
-
-
 
 bool send_ok_response_command(char* response_buf, char* command, int maxlen, unsigned int timeout_ms)
 {
@@ -633,6 +599,3 @@ int awaitReceviediResponse(char* response_buf, char* response_verifier, unsigned
 
     return 0;
 }
-
-
-

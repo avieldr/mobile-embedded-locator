@@ -1,4 +1,3 @@
-//this is ex9
 #ifndef GPS_PARSER_H
 #define GPS_PARSER_H
 

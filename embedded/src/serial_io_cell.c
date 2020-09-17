@@ -1,26 +1,17 @@
-//this is ex9
 
 #include "serial_io_cell.h"
-
 #include <stdio.h>
 #include "em_device.h"
 #include "em_cmu.h"
 #include "em_chip.h"
 #include "em_emu.h"
-
 #include "em_leuart.h"
 #include "bspconfig.h"
 #include "retargetserial.h"
-
 #include "shared_tools.h"
 
 #ifndef GPS_SERIAL_IO_H
 #define GPS_SERIAL_IO_H
-
-
-
-
-
 
 bool SerialInitCellular(char* port, unsigned int baud)
 {
@@ -55,7 +46,6 @@ bool SerialInitCellular(char* port, unsigned int baud)
 	  USART_Enable(USART2, usartEnable);
 	  return 1;
 }
-
 
 bool SerialSendCellular(unsigned char *buf, unsigned int size)
 {
@@ -111,10 +101,5 @@ void SerialDisableCellular()
 {
 	USART_Reset(USART2);
 }
-
-
-
-
-
 
 #endif //GPS_SERIAL_IO_H

@@ -1,17 +1,12 @@
-//this is ex9
-
 #include "serial_io_gps.h"
-
 #include <stdio.h>
 #include "em_device.h"
 #include "em_cmu.h"
 #include "em_chip.h"
 #include "em_emu.h"
-
 #include "em_leuart.h"
 #include "bspconfig.h"
 #include "retargetserial.h"
-
 
 #ifndef GPS_SERIAL_IO_H
 #define GPS_SERIAL_IO_H
@@ -71,7 +66,7 @@ uint16_t SerialRecv(uint8_t *buf, uint16_t maxlen, uint32_t timeout_ms)
 {
 	int i = 0;
 	uint32_t curTicks = msTicks;
-	uint32_t timeout_ticks = timeout_ms * 8; // TODO convert!!
+	uint32_t timeout_ticks = timeout_ms * 8;
 	while (i < maxlen - 1)
 		{
 

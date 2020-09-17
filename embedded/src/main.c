@@ -1,4 +1,3 @@
-//this is ex9
 #include <stdbool.h>
 #include <stdio.h>
 #include "em_device.h"
@@ -6,23 +5,16 @@
 #include "em_chip.h"
 #include "em_emu.h"
 #include "bsp.h"
-
 #include "em_leuart.h"
 #include "em_ldma.h"
 #include "bspconfig.h"
 #include "retargetserial.h"
-
 #include "display.h"
 #include "textdisplay.h"
 #include "retargettextdisplay.h"
-
 #include "gps.h"
 #include "cellular.h"
-//#include "serial_io_gps.h"
-# include "shared_tools.h"
-
-
-
+#include "shared_tools.h"
 
 #define MAXLEN_PAYLOAD 2000
 #define PAYLOAD_BUF_LEN 2001
@@ -30,7 +22,6 @@
 #define RESPONSE_BUF_LEN 2001
 #define MAXLEN_TOKEN 300
 #define TOKEN_BUF_LEN 301
-
 
 #define SIGNIN_FORMAT "POST /%s HTTP/1.1\r\n" \
                       "accept: application/json, text/plain, */*\r\n" \
@@ -43,7 +34,6 @@
                       "\r\n" \
                       "{\"email\": \"%s\", \"password\": \"%s\"}" \
                       "\r\n\r\n"
-
 
 #define TRACK_POST_FORMAT "POST /%s HTTP/1.1\r\n" \
                       "accept: application/json, text/plain, */*\r\n" \
@@ -63,8 +53,6 @@
                       "}" \
                       "\r\n\r\n"
 
-
-
 #define TRACK_GET_FORMAT "GET /%s HTTP/1.1\r\n" \
                       "accept: application/json, text/plain, */*\r\n" \
                       "authorization: Bearer %s\r\n" \
@@ -79,10 +67,6 @@
                       "\r\n\r\n"
 
 OPERATOR_INFO opList[10];
-
-/* Local prototypes */
-//void delay(int number_of_seconds);
-//volatile uint32_t msTicks; /* counts 1ms timeTicks */
 
 
 /***************************************************************************//**
@@ -137,7 +121,6 @@ void setupLeuart(void)
   LEUART_Enable(LEUART0, leuartEnable);
 }
 
-
 bool getGPSLocation(GPS_LOCATION_INFO* location){
     int gps_recievd = 0;
 
@@ -191,8 +174,6 @@ bool signin(char *payload, char *response, char* token, char* host, int contentL
         {
             printf("%s\n", "Failed to parse the token");
         }
-
-
     }
     else
     {
@@ -225,15 +206,11 @@ bool getTracks(char *payload, char *response, char* token, char* host, int conte
     return  (CellularSendHTTPPOSTRequest(payload, MAXLEN_PAYLOAD, response, MAXLEN_RESPONSE) != -1);
 }
 
-
 /***************************************************************************//**
  * @brief  Main function
  ******************************************************************************/
 int main(void)
 {
-
-
-
   EMU_DCDCInit_TypeDef dcdcInit = EMU_DCDCINIT_STK_DEFAULT;
   CMU_HFXOInit_TypeDef hfxoInit = CMU_HFXOINIT_STK_DEFAULT;
 
@@ -285,9 +262,7 @@ int main(void)
   char* email = "YOUR_EMAIL_HERE";
   char token[TOKEN_BUF_LEN];
   char* host = "NGROK_SESSION_ADRESS_HERE";
-//    char* host = "en8wtnrvtnkt5.x.pipedream.net:80";
   char* ip = "INTERNET_SERVICE_PROFILE_IP_HERE";
-
 
   char response_buf[RESPONSE_BUF_LEN];
   flushLocalBuffer(&token, MAXLEN_TOKEN);
@@ -297,36 +272,9 @@ int main(void)
 
   SetEchoMode(0);
 
-
-
       if (1)
       {
 
-
-
-  //        CellularGetICCID(ccidNum, 40);
-  //        CellularGetRegistrationStatus(&status);
-//          CellularGetCops();
-  //        CellularGetOperators(opList, 10, &numOpsFound);
-  //        for (int i = 0; i < numOpsFound; ++i)
-  //        {
-  //
-  //            char str[12];
-  //            int op_num = opList[i].operatorCode;
-  //            sprintf(str, "%d", op_num);
-  //            int_to_str(op_num, str);
-  //
-  //            if (CellularSetOperator(1, str))
-  //            {
-  //                CellularGetSignalQuality(&csq);
-  //                connected = true;
-  //                break;
-  //            }
-  //            else
-  //            {
-  //
-  //            }
-  //        }
           while (1)
           {
         	  while (!profileConnection){
@@ -337,9 +285,6 @@ int main(void)
               while (!strlen(token)) {
             	  signin(payload, response_buf, token, host, 29, email, pass, "signin"); // todo handle failure
               }
-
-  //
-               // todo handle failure
 
               while(1)
               {
@@ -359,13 +304,7 @@ int main(void)
                 	  else printf("%s\n", "Failed to retrieve location");
                   	bool ret_val = postTrack(payload, response_buf, token, host, 116, "tracks", 317497050, 351877183);
                   }
-
-
-
               }
-
           }
-
       }
-
 }

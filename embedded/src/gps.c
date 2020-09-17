@@ -1,14 +1,11 @@
-//this is ex9
 #include <stdio.h>
 #include "gps.h"
-
 #include "parser_gps.h"
 #include "serial_io_gps.h"
 
 #define MAX_TRIES 10
 #define BAUD 9600
 #define BUF_LEN 720
-
 
 void GPSInit()
 {
@@ -26,15 +23,6 @@ void GPSInit()
         else
         {
             printf("%s\n", "Failed to init s_port, try again in 3 seconds..");
-//            if (iter_count < MAX_TRIES)
-//            {
-//                printf("%s\n", "Failed to init s_port, try again in 3 seconds..");
-//            }
-//            else
-//            {
-//                printf("%s", "Failed to init s_port after 10 tries, Rebooting...");
-////			TODO reboot!!
-//            }
         }
         delay(3);
     }
@@ -54,6 +42,7 @@ uint32_t GPSGetReadRaw(char *buf, uint32_t maxlen)
         printf("%s\n", "Failed to read from s_port");
     return bytes_read;
 }
+
 void flush(char* buf, int len)
 {
 	for (int j = 0; j < len - 1; ++j)
@@ -61,9 +50,9 @@ void flush(char* buf, int len)
 		buf[j] = 0;
 	}
 }
+
 bool GPSGetFixInformation(GPS_LOCATION_INFO *location)
 {
-
     char row_buf[BUF_LEN];
     uint32_t maxlen = BUF_LEN - 1;
 
@@ -76,7 +65,6 @@ bool GPSGetFixInformation(GPS_LOCATION_INFO *location)
         uint32_t bytes_read = 0;
         while (bytes_read == 0)
         {
-//        	flush(row_buf, BUF_LEN - 1);
             bytes_read = GPSGetReadRaw(row_buf, maxlen);
             ++num_of_serial_reads;
             if (num_of_serial_reads >= MAX_TRIES)

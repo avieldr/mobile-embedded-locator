@@ -1,6 +1,4 @@
-//this is ex9
 #include <stdbool.h>
-
 #include "serial_io_gps.h"
 
 #ifndef GPS_GPS_H
