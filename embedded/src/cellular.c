@@ -102,7 +102,6 @@ void SetEchoMode(bool on)
         printf("%s\n", "-->Setting echo mode OFF");
         SerialSendCellular("ATE0\r\n", 7);
     }
-
 }
 
 void CellularDisable()
@@ -155,13 +154,11 @@ bool CellularCheckModem(void)
         }
         else
         {
-
             continue;
         }
     }
     printf("%s\n\n", "---->Modem is off!");
     return 0;
-
 }
 
 bool CellularGetRegistrationStatus(int *status)
@@ -202,8 +199,7 @@ bool CellularGetRegistrationStatus(int *status)
 bool CellularGetSignalQuality(int *csq)
 {
     printf("%s\n", "-->Trying to get signal quality");
-
-
+    
     char* csq_command = "AT+CSQ\r\n";
     unsigned int read_bytes = 0;
     bool send_ret_val = 0;
@@ -223,7 +219,6 @@ bool CellularGetSignalQuality(int *csq)
         printf("%s\n", "---->Did not received CSQ answer\n---->SIGNAL STRENGTH QUERY FAILED!!");
         return 0;
     }
-
     else
     {
         if (parse_sig_quality(buf, csq))
@@ -596,6 +591,5 @@ int awaitReceviediResponse(char* response_buf, char* response_verifier, unsigned
             return read_bytes;
         }
     }
-
     return 0;
 }
