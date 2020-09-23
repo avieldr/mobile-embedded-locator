@@ -194,8 +194,6 @@ bool postTrack(char *payload, char *response, char* token, char* host, int conte
 
 	int len = contentLength + latLen + lonLen;
 
-
-
     sprintf(payload, TRACK_POST_FORMAT, route, token, host, len, latStr, lonStr, time(NULL));
     return  (CellularSendHTTPPOSTRequest(payload, MAXLEN_PAYLOAD, response, MAXLEN_RESPONSE) != -1);
 }
@@ -248,7 +246,7 @@ int main(void)
   const OPERATOR_INFO op_info = {"", 0, ""};
   for (int i = 0; i < 10; ++i)
   {
-	  opList[i] = op_info;
+      opList[i] = op_info;
   }
   int csq;
   int numOpsFound;
@@ -272,39 +270,33 @@ int main(void)
 
   SetEchoMode(0);
 
-      if (1)
-      {
+	 
+  while (!profileConnection){
+	  profileConnection = CellularSetupInternetConnectionProfile(20) && CellularSetupInternetServiceSetupProfile(ip, 80, 200);
+  }
 
-          while (1)
-          {
-        	  while (!profileConnection){
-        		  profileConnection = CellularSetupInternetConnectionProfile(20) && CellularSetupInternetServiceSetupProfile(ip, 80, 200);
-        	  }
+  char payload[PAYLOAD_BUF_LEN];
+  while (!strlen(token)) 
+  {
+  signin(payload, response_buf, token, host, 29, email, pass, "signin"); // todo handle failure
+  }
 
-              char payload[PAYLOAD_BUF_LEN];
-              while (!strlen(token)) {
-            	  signin(payload, response_buf, token, host, 29, email, pass, "signin"); // todo handle failure
-              }
-
-              while(1)
-              {
-                  ++iter;
-                  printf("%s%d:\n", "Iteration ",iter);
-                  GPS_LOCATION_INFO location;
-
-
-                  if (getGPSLocation(&location) && strlen(token))
-                  {
-                      printf("%s %d,%d\n", "gps:", location.latitude, location.longitude);
-                      bool ret_val = postTrack(payload, response_buf, token, host, 110, "tracks", location.latitude, location.longitude);
-                  }
-                  else
-                  {
-                	  if (!strlen(token)) printf("%s\n", "Invalid token");
-                	  else printf("%s\n", "Failed to retrieve location");
-                  	bool ret_val = postTrack(payload, response_buf, token, host, 116, "tracks", 317497050, 351877183);
-                  }
-              }
-          }
-      }
+  while(1)
+  {
+    ++iter;
+    printf("%s%d:\n", "Iteration ",iter);
+    GPS_LOCATION_INFO location;
+	  
+    if (getGPSLocation(&location) && strlen(token))
+    {
+      printf("%s %d,%d\n", "gps:", location.latitude, location.longitude);
+      bool ret_val = postTrack(payload, response_buf, token, host, 110, "tracks", location.latitude, location.longitude);
+    }
+    else
+    {
+	  if (!strlen(token)) printf("%s\n", "Invalid token");
+	  else printf("%s\n", "Failed to retrieve location");
+	bool ret_val = postTrack(payload, response_buf, token, host, 116, "tracks", 317497050, 351877183);
+    }
+  }
 }
