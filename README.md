@@ -1,4 +1,4 @@
-# Mobile-Embedded-Locator - Summary
+# Mobile-Embedded-Locator: Summary
 This project implements an end-to-end 'locator-system': an embedded package that transmits its location to the server and a mobile app that displays the locations on real time on the map.
 General scheme:
 
